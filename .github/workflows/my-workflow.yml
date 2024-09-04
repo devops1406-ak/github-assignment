@@ -48,3 +48,4 @@ jobs:
         git add .
         git commit -m "Add build artifacts" || echo "No changes to commit"
         git push origin artifacts-store
+
