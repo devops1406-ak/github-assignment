@@ -32,6 +32,7 @@ jobs:
       run: |
         mkdir -p artifacts
         cp target/*.jar artifacts/ || echo "No artifacts found to copy"
+        
 
     - name: Stash untracked files
       run: git stash --include-untracked || true

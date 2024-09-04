@@ -25,6 +25,9 @@ jobs:
       with:
         name: build-artifacts
         path: artifacts
+        github-token: ${{github.token}}
+        repository: ${{github.repository}}
+        run-id: 10705219029
 
     - name: Add artifacts to the repository
       run: |
