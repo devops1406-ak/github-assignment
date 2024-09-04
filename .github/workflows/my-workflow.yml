@@ -43,9 +43,20 @@ jobs:
       run: |
         git pull --rebase origin artifacts-store || true
         cp -R artifacts/* .
-        git config --global user.email "github-actions@github.com"
-        git config --global user.name "GitHub Actions"
+        git config --global user.email "kumar.akash.beehyv@github.com"
+        git config --global user.name "devops1406-ak"
         git add .
         git commit -m "Add build artifacts" || echo "No changes to commit"
         git push origin artifacts-store
+      
+
+    # - name: Merge remote changes and push artifacts
+    #   run: |
+    #     git pull --rebase origin artifacts-store || true
+    #     cp -R artifacts/* .
+    #     git config --global user.email "github-actions@github.com"
+    #     git config --global user.name "GitHub Actions"
+    #     git add .
+    #     git commit -m "Add build artifacts" || echo "No changes to commit"
+    #     git push origin artifacts-store
 
