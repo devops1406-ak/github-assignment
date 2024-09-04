@@ -41,17 +41,18 @@ jobs:
           git checkout artifacts-store
         else
           git checkout -b artifacts-store
+          git push -u origin artifacts-store
         fi
 
     - name: Copy artifacts to artifacts-store branch
       run: |
         if [ "$(ls -A artifacts)" ]; then
           cp -R artifacts/* .
-          git config --global user.email "kumar.akash.beehyv@example.com"
-          git config --global user.name "devops1406-ak"
+          git config --global user.email "your-email@example.com"
+          git config --global user.name "GitHub Actions"
           git add .
-          git commit -m "Add build artifacts"
-          git push origin HEAD:artifacts-store
+          git commit -m "Add build artifacts" || echo "No changes to commit"
+          git push origin artifacts-store
         else
           echo "No artifacts to upload"
         fi
