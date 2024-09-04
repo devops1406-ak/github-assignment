@@ -24,8 +24,8 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Run tests with Maven
-      run: mvn test
+    # - name: Run tests with Maven
+    #   run: mvn test
 
     - name: Archive build artifacts
       run: mkdir -p artifacts && cp target/*.jar artifacts/
