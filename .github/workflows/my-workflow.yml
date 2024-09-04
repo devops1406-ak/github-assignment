@@ -37,7 +37,7 @@ jobs:
     - name: Checkout artifacts-store branch
       run: |
         git fetch origin
-        git checkout artifacts-store || git checkout -b artifacts-store
+        git switch -c artifacts-store || git switch artifacts-store
 
     - name: Merge remote changes and push artifacts
       run: |
