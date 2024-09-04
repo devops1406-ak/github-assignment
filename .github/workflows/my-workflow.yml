@@ -32,12 +32,12 @@ jobs:
     - name: Archive build artifacts
       run: |
         mkdir -p artifacts
-        cp target/*.jar artifacts/
+        cp target/*.jar artifacts/ || echo "No artifacts found to copy"
 
     - name: Checkout artifacts-store branch
       run: |
         git fetch origin
-        git checkout artifacts-store
+        git checkout artifacts-store || git checkout -b artifacts-store
 
     - name: Merge remote changes and push artifacts
       run: |
