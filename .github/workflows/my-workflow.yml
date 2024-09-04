@@ -26,3 +26,20 @@ jobs:
 
     - name: Run tests with Maven
       run: mvn test
+
+    - name: Archive build artifacts
+      run: mkdir -p artifacts && cp target/*.jar artifacts/
+
+    - name: Checkout artifacts-store branch
+      uses: actions/checkout@v4
+      with:
+        ref: artifacts-store
+
+    - name: Copy artifacts to artifacts-store branch
+      run: |
+        cp -R artifacts/* .
+        git config --global user.email "your-email@example.com"
+        git config --global user.name "GitHub Actions"
+        git add .
+        git commit -m "Add build artifacts"
+        git push origin HEAD:artifacts-store
