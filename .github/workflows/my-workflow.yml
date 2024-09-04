@@ -34,42 +34,45 @@ jobs:
         mkdir -p artifacts
         cp target/*.jar artifacts/ || echo "No artifacts found to copy"
 
-    - name: Checkout or create artifacts-store branch
+    - name: Checkout artifacts-store branch
       run: |
         git fetch origin
-        if git show-ref --quiet refs/heads/artifacts-store; then
-          git checkout artifacts-store
-        else
-          git checkout -b artifacts-store
-          git push -u origin artifacts-store
-        fi
+        git checkout artifacts-store || git checkout -b artifacts-store
 
-    - name: Copy artifacts to artifacts-store branch
+    - name: Merge remote changes and push artifacts
       run: |
-        if [ "$(ls -A artifacts)" ]; then
-          cp -R artifacts/* .
-          git config --global user.email "your-email@example.com"
-          git config --global user.name "GitHub Actions"
-          git add .
-          git commit -m "Add build artifacts" || echo "No changes to commit"
-          git push origin artifacts-store
-        else
-          echo "No artifacts to upload"
-        fi
+        git pull --rebase origin artifacts-store || true
+        cp -R artifacts/* .
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "GitHub Actions"
+        git add .
+        git commit -m "Add build artifacts" || echo "No changes to commit"
+        git push origin artifacts-store
 
     # - name: Archive build artifacts
-    #   run: mkdir -p artifacts && cp target/*.jar artifacts/
+    #   run: |
+    #     mkdir -p artifacts
+    #     cp target/*.jar artifacts/ || echo "No artifacts found to copy"
 
-    # - name: Checkout artifacts-store branch
-    #   uses: actions/checkout@v4
-    #   with:
-    #     ref: artifacts-store
+    # - name: Checkout or create artifacts-store branch
+    #   run: |
+    #     git fetch origin
+    #     if git show-ref --quiet refs/heads/artifacts-store; then
+    #       git checkout artifacts-store
+    #     else
+    #       git checkout -b artifacts-store
+    #       git push -u origin artifacts-store
+    #     fi
 
     # - name: Copy artifacts to artifacts-store branch
     #   run: |
-    #     cp -R artifacts/* .
-    #     git config --global user.email "kumar.akash@example.com"
-    #     git config --global user.name "GitHub Actions"
-    #     git add .
-    #     git commit -m "Add build artifacts"
-    #     git push origin HEAD:artifacts-store
+    #     if [ "$(ls -A artifacts)" ]; then
+    #       cp -R artifacts/* .
+    #       git config --global user.email "your-email@example.com"
+    #       git config --global user.name "GitHub Actions"
+    #       git add .
+    #       git commit -m "Add build artifacts" || echo "No changes to commit"
+    #       git push origin artifacts-store
+    #     else
+    #       echo "No artifacts to upload"
+    #     fi
