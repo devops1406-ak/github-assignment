@@ -36,12 +36,12 @@ jobs:
 
     - name: Checkout or create artifacts-store branch
       run: |
-        git fetch origin
+        git fetch origin1
         if git show-ref --quiet refs/heads/artifacts-store; then
           git checkout artifacts-store
         else
           git checkout -b artifacts-store
-          git push -u origin artifacts-store
+          git push -u origin1 artifacts-store
         fi
 
     - name: Copy artifacts to artifacts-store branch
@@ -52,7 +52,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git add .
           git commit -m "Add build artifacts" || echo "No changes to commit"
-          git push origin artifacts-store
+          git push origin1 artifacts-store
         else
           echo "No artifacts to upload"
         fi
