@@ -27,6 +27,35 @@ jobs:
     - name: Run tests with Maven
       run: mvn test
 
+
+
+    - name: Archive build artifacts
+      run: |
+        mkdir -p artifacts
+        cp target/*.jar artifacts/ || echo "No artifacts found to copy"
+
+    - name: Checkout or create artifacts-store branch
+      run: |
+        git fetch origin
+        if git show-ref --quiet refs/heads/artifacts-store; then
+          git checkout artifacts-store
+        else
+          git checkout -b artifacts-store
+        fi
+
+    - name: Copy artifacts to artifacts-store branch
+      run: |
+        if [ "$(ls -A artifacts)" ]; then
+          cp -R artifacts/* .
+          git config --global user.email "kumar.akash.beehyv@example.com"
+          git config --global user.name "devops1406-ak"
+          git add .
+          git commit -m "Add build artifacts"
+          git push origin HEAD:artifacts-store
+        else
+          echo "No artifacts to upload"
+        fi
+
     # - name: Archive build artifacts
     #   run: mkdir -p artifacts && cp target/*.jar artifacts/
 
