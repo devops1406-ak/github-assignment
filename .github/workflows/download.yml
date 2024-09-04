@@ -1,18 +1,24 @@
-name: process-artifacts
+name: Download Artifacts
 
 on:
   workflow_run:
-    workflows: ["my-workflow"]  # The name of the first pipeline
+    workflows: ["my-workflow"]  
     types:
       - completed
 
 jobs:
-  process:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
+    - name: Checkout artifacts-store branch
       uses: actions/checkout@v4
+      with:
+        ref: artifacts-store
+
+    - name: Set up Git configuration
+      run: |
+        git config --global user.email "${{ secrets.MY_USER_EMAIL }}"
+        git config --global user.name "${{ secrets.MY_USER_NAME }}"
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
@@ -20,20 +26,9 @@ jobs:
         name: build-artifacts
         path: artifacts
 
-    - name: Checkout artifacts-store branch
+    - name: Add artifacts to the repository
       run: |
-        git fetch origin
-        git switch artifacts-store || git switch -b artifacts-store
-
-    - name: Add, commit, and push artifacts
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_USER_EMAIL: ${{ secrets.MY_USER_EMAIL }}
-        GITHUB_USER_NAME: ${{ secrets.MY_USER_NAME }}
-      run: |
-        git config --global user.email "$MY_USER_EMAIL"
-        git config --global user.name "$MY_USER_NAME"
         cp -R artifacts/* .
         git add .
-        git commit -m "Add downloaded artifacts" || echo "No changes to commit"
+        git commit -m "Deploy artifacts from build" || echo "No changes to commit"
         git push origin artifacts-store
