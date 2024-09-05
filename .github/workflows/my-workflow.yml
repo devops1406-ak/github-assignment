@@ -39,11 +39,6 @@ jobs:
         name: build-artifacts
         path: artifacts/*.jar
 
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: build-artifacts
-        path: ./downloaded-artifacts
 
     - name: Stash untracked files
       run: git stash --include-untracked || true
@@ -63,3 +58,30 @@ jobs:
         git add .
         git commit -m "Add build artifacts" || echo "No changes to commit"
         git push origin artifacts-store
+
+  download:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout artifacts-store branch
+      uses: actions/checkout@v4
+      with:
+        ref: artifacts-store
+
+    - name: Set up Git configuration
+      run: |
+        git config --global user.email "${{ secrets.MY_USER_EMAIL }}"
+        git config --global user.name "${{ secrets.MY_USER_NAME }}"
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+        path: ./downloaded-artifacts
+
+    - name: Add artifacts to the repository
+      run: |
+        cp -R artifacts/* .
+        git add .
+        git commit -m "Deploy artifacts from build" || echo "No changes to commit"
+        git push origin artifacts-store
+

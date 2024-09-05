@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  deploy:
+  download:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout artifacts-store branch
@@ -25,9 +25,6 @@ jobs:
       with:
         name: build-artifacts
         path: ./downloaded-artifacts
-        # github-token: ${{github.token}}
-        # repository: ${{github.repository}}
-        # run-id: 10715143208
 
     - name: Add artifacts to the repository
       run: |
