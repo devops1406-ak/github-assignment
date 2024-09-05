@@ -39,6 +39,12 @@ jobs:
         name: build-artifacts
         path: artifacts/*.jar
 
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+        path: ./downloaded-artifacts
+
     - name: Stash untracked files
       run: git stash --include-untracked || true
 
