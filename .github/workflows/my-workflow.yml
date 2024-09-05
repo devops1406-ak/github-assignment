@@ -32,7 +32,12 @@ jobs:
       run: |
         mkdir -p artifacts
         cp target/*.jar artifacts/ || echo "No artifacts found to copy"
-        
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts
+        path: artifacts/*.jar
 
     - name: Stash untracked files
       run: git stash --include-untracked || true
